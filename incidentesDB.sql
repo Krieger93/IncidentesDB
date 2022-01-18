@@ -106,3 +106,32 @@ CREATE VIEW TicketsSinResolver AS SELECT titulo_incidente, descripcion, estado F
 CREATE VIEW ContarUsuariosPorGrupos AS SELECT g.nombre_grupo, g.id_grupo,(SELECT COUNT(*) FROM usuarios WHERE id_grupo = g.id_grupo) UsuariosxGrupo FROM grupos g;
 CREATE VIEW ContarTicketsPorCategorias AS SELECT c.id_categoria, c.titulo_categoria, (SELECT COUNT(*) FROM incidentes WHERE id_categoria = c.id_categoria) TicketsxCategoria FROM categorias c;
 CREATE VIEW TicketsPorUserAsignado AS SELECT i.titulo_incidente, i.descripcion, i.estado, u.id_user, u.user FROM incidentes i INNER JOIN usuarios u ON i.id_owner = u.id_user;
+
+
+
+-- CREANDO FUNCIONES
+
+DELIMITER $$
+CREATE FUNCTION `UserLevel` (PARAM1 INT) RETURNS INT
+NO SQL
+BEGIN
+	DECLARE resultado VARCHAR(30);
+    IF PARAM1 > 0 THEN
+		SET resultado = 'NO ES ADMIN';
+	ELSEIF PARAM1 = 0 THEN
+		SET resultado = 'ES ADMIN';
+	END IF;
+    RETURN resultado;
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE FUNCTION `PromedioKPI` (PARAM1 INT) RETURNS FLOAT
+READS SQL DATA
+BEGIN
+    RETURN (
+    SELECT AVG(kpis.puntaje_usuario), COUNT(puntaje_usuario) AS CONTANDO FROM kpis
+    );
+END$$
+DELIMITER ;
