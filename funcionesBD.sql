@@ -16,11 +16,11 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE FUNCTION `PromedioKPI` (PARAM1 INT) RETURNS FLOAT
+CREATE FUNCTION `PromedioKPI` () RETURNS FLOAT
 READS SQL DATA
 BEGIN
     RETURN (
-    SELECT AVG(kpis.puntaje_usuario), COUNT(puntaje_usuario) AS CONTANDO FROM kpis
+    SELECT AVG(kpis.puntaje_usuario) AS CONTANDO FROM kpis
     );
 END$$
 DELIMITER ;
